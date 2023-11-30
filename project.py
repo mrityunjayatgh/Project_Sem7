@@ -36,15 +36,15 @@ for url1 in book_links:
 
     # Create a DataFrame with the data
     df = pd.DataFrame([data], columns=[f"Column_{i+1}" for i in range(len(data))])
-    headers = ['ID', 'Type', 'Price(Excluding Tax)', 'Price(Including Tax)', 'Tax', 'Availability', 'Reviews']
+    # headers = ['ID', 'Type', 'Price(Excluding Tax)', 'Price(Including Tax)', 'Tax', 'Availability', 'Reviews']
     # df = pd.DataFrame([data], columns=[f"Column_{i + 1}" for i in range(len(data))])
     # print(df)
     if url1 == book_links[0]:
-        df.to_excel(file_name, index=False, header=headers)
+        df.to_excel(file_name, index=False)
     else:
         df_old = pd.read_excel(file_name)
-        headers = df_old.columns.tolist()
-        df.columns = headers
+        # headers = df_old.columns.tolist()
+        # df.columns = headers
         df_new = pd.concat([df_old, df])
         df_new.to_excel(file_name, index=False)
 
