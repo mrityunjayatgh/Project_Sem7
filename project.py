@@ -6,8 +6,7 @@ from openpyxl.workbook import Workbook
 
 now = datetime.now()
 timestamp = now.strftime("%Y%m%d%H%M%S%f")[:-3]
-# file_name = f'data_{timestamp}.xlsx'
-file_name = 'Report.xlsx'
+file_name = f'data_{timestamp}.xlsx'
 
 url = 'https://books.toscrape.com/'
 
@@ -28,24 +27,24 @@ book_links = [base_url + link if 'catalogue' in link else link for link in book_
 for url1 in book_links:
     response1 = requests.get(url1)
     soup1 = BeautifulSoup(response1.text, 'html.parser')
-    title = soup.find('h1').text.strip()
+    # title = soup.find('h1').text.strip()
     td_tags = soup1.find_all('td')
 
     # Extracting data from td tags
     data = [tag.text.strip() for tag in td_tags]
-    data.insert(0, title)
+    # data.insert(0, title)
 
     # Create a DataFrame with the data
     df = pd.DataFrame([data], columns=[f"Column_{i+1}" for i in range(len(data))])
-    # headers = ['ID', 'Type', 'Price(Excluding Tax)', 'Price(Including Tax)', 'Tax', 'Availability', 'Reviews']
-    # df = pd.DataFrame([data], columns=[f"Column_{i + 1}" for i in range(len(data))])
+    headers = ['ID', 'Type', 'Price(Excluding Tax)', 'Price(Including Tax)', 'Tax', 'Availability', 'Reviews']
     # print(df)
+    # Save the DataFrame to an Excel file
     if url1 == book_links[0]:
-        df.to_excel(file_name, index=False)
+        df.to_excel(file_name, index=False, header=headers)
     else:
         df_old = pd.read_excel(file_name)
-        # headers = df_old.columns.tolist()
-        # df.columns = headers
+        headers = df_old.columns.tolist()
+        df.columns = headers
         df_new = pd.concat([df_old, df])
         df_new.to_excel(file_name, index=False)
 
